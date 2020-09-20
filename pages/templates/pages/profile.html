@@ -1,0 +1,81 @@
+{% extends 'pages/base.html' %}
+
+{% block content %}
+
+<div class="row">
+    {% include 'pages/include/_sidebar.html' %}
+    
+    <div class="col-md-9 col-sm-12">
+        {% if request.user.profile.id == profile.id %}
+        <div class="float-right">
+            <a href="{% url 'pages:edit' %}" class="btn btn-info">Edit profile</a>
+        </div>
+
+        {% elif request.user.is_authenticated %}
+            {% if btn_text == "not_friend" %}
+                <div class="float-right">
+                    <a href="{% url 'pages:send_request' profile.id %}" class="btn btn-primary">Add Friend</a>
+                </div>
+            {% elif  btn_text == "request_sent"  %}
+                <div class="float-right">
+                    <a href="{% url 'pages:cancle_request' profile.id %}" class="btn btn-warning">cancle</a>
+                </div>
+            {% endif %}
+        {% endif %}
+
+        <h3>{{profile.user}}</h3>
+            <div class="my-4">
+                <h6>{{profile.first}} {{profile.last}} | {{ profile.email }}</h6>
+                <h6>Speaks {{profile.speaks}}</h6>
+                <h6>is learning: {{profile.is_learning}}</h6>
+            </div>
+
+            {% if friends %}
+            <div class="table-responsive">
+                <table class="table">
+                    <caption>List of Friends</caption>
+                    <body>
+                        <thead>
+                            <tr>
+                                <th>Username</th>
+                                <th>Email</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for f in friends %}
+                            <tr>
+                                <td>{{f}}</td>
+                                <td>{{f.user.email}}</td>
+                                {% if request.user.profile.id == profile.id %}
+                                    <td><a class="btn btn-danger" href="{% url 'pages:unfriend' f.id %}">Unfriend</a></td>
+                                {% endif %}
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </body>
+                </table>
+            </div>
+            {% endif %}
+
+            {% if request.user.profile.id == profile.id and received_requests %}
+            <div class="table-responsive">
+                <table class="table">
+                    <caption>Recived Friend Requests</caption>
+                    <body>
+                        
+                        {% for r_requests in received_requests %}
+                        <tr>
+                            <td>{{ r_requests }}</td>
+                            <td><a class="btn btn-primary" href="{% url 'pages:accept_request' r_requests.from_profile.id %}">Accept</a></td>
+                            <td><a class="btn btn-danger" href="{% url 'pages:delete_request' r_requests.from_profile.id %}">Delete</a></td>
+                        </tr>
+                        {% endfor %}
+                    </body>
+                </table>
+            </div>
+            {% endif %}
+            
+    </div>
+</div>
+
+{% endblock content %}
