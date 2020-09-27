@@ -23,6 +23,9 @@
                     <li class="nav-item">
                         <a href="{{request.user.profile.get_absolute_url}}">Profile</a>
                     </li>
+                    <li class="nav-item">
+                        <a href="{% url 'conversations:inbox' %}">Inbox</a>
+                    </li>
                 {% endif %}
             </ul>
 

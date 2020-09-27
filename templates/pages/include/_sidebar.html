@@ -10,7 +10,7 @@
                 <a href="{{profile.get_absolute_url}}"> {{profile}} </a>
             </h4>
             {% if request.user == profile.user %}
-                Welcome, {{ profile.user }} <p><a href="{% url 'pages:logout' %}">Logout</a></p>
+                Welcome, {{ profile.user }} <p><a href="{% url 'pages:logout' %}">Logout</a> | <a href="{% url 'conversations:inbox' %}">Inbox</a></p>
             {% elif request.user.is_anonymous %}
             <p>
                 <a href="{% url 'pages:register' %}">Register</a> | 

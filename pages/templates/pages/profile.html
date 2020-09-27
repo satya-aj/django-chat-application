@@ -47,7 +47,7 @@
                                 <td>{{f}}</td>
                                 <td>{{f.user.email}}</td>
                                 {% if request.user.profile.id == profile.id %}
-                                    <td><a class="btn btn-danger" href="{% url 'pages:unfriend' f.id %}">Unfriend</a></td>
+                                    <td><a class="btn btn-danger confirm-delete" href="{% url 'pages:unfriend' f.id %}" id={{f}} data-toggle="model" data-target="#confirmModel">Unfriend</a></td>
                                 {% endif %}
                             </tr>
                             {% endfor %}
@@ -78,4 +78,30 @@
     </div>
 </div>
 
+<div class="model fade" id="confirmModel" tabindex='-1' caller-id='' role='dialog'>
+    <div class="model-dialog" role='document'> 
+        <div class="model-content">
+            <div class="model-body"> </div>
+            <div class="model-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss='model'>Cancel</button>
+                <button type="button" class="btn btn-danger" data-dismiss='model' id='confirmButtonModel'>UnFriend</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 {% endblock content %}
+
+{% block js %}
+<script type="text/javascript">
+    $(document).on('click', 'confirm-delete', function(){
+        $('#confirmModel').attr("caller-id", $(this).attr("id"));
+        $("div.model-body").text("Are your sure you want to unfriend " + $(this).attr("id")+"?");
+    });
+
+    $(document).on('click', '#confirmationButtonModel', function(){
+        var caller = $("#confirmButtonModel").closest(".model").attr("caller-id");
+        window.location = $("#".concat(caller)).attr("href");
+    });
+</script>
+{% endblock js %}
